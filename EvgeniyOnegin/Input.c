@@ -1,14 +1,14 @@
 #include "Input.h"
 
+#define _MIN(x, y) ((x < y)? (x):(y))
+
 char *CreateStrBuffer(const char *const FilePath)
 {
     assert(FilePath != NULL);
-    //assert(NumOfLines != NULL);
 
     FILE *InFileStream = fopen(FilePath, "r");
     if(InFileStream==NULL)
     {
-        printf("Error! Wrong file path\n");
 
         return NULL;
     }
@@ -18,17 +18,13 @@ char *CreateStrBuffer(const char *const FilePath)
     unsigned const int BufferLen = FileInfo.st_size;
 
 
-    char *StrBuffer = (char *)calloc(BufferLen + 2, sizeof(char));//discuss +2 with a mentor
-
-    
+    char *StrBuffer = (char *)calloc(BufferLen + 2, sizeof(char));
 
     assert(StrBuffer != NULL);
 
-    assert(
-        fread(StrBuffer, sizeof(char), BufferLen, InFileStream) == BufferLen);//NULL
+    if(fread(StrBuffer, sizeof(char), BufferLen, InFileStream) != BufferLen)
+        return NULL;
 
-    
-    
     fclose(InFileStream);
 
 
@@ -39,15 +35,15 @@ char *CreateStrBuffer(const char *const FilePath)
 }
 
 
-TableOfContent *CreateTOC(char *InStrBuffer, unsigned int *NumOfLines, const char Separator)
+TableOfContent *CreateTOC(char *StrBuffer, unsigned int *NumOfLines, const char Separator)
 {
     assert(Separator < 'A');
 
-    char *StrBuffer = InStrBuffer;
+    //char *StrBuffer = InStrBuffer;
 
     if (StrBuffer == NULL)
     {
-        printf("Warning! String buffer is empty\n");
+        //printf("Warning! String buffer is empty\n");
 
         return NULL;
     }
@@ -56,12 +52,13 @@ TableOfContent *CreateTOC(char *InStrBuffer, unsigned int *NumOfLines, const cha
     assert(NumOfLines != NULL);
 
     TableOfContent *TOC = (TableOfContent *)calloc(1, sizeof(TableOfContent));
+    assert(TOC != NULL);
 
     *NumOfLines = 0;
 
-    
+    StrBuffer--;
 
-    while (StrBuffer)
+    while (StrBuffer++)
     {
         //printf("line=%d\n", *NumOfLines);
         static unsigned int TocLen = 1;
@@ -79,9 +76,15 @@ TableOfContent *CreateTOC(char *InStrBuffer, unsigned int *NumOfLines, const cha
 
         TOC[*NumOfLines].Line = StrBuffer;
 
-        
+        if(Separator != '\n')
+        {
+            char *Point1 = strchr(StrBuffer, Separator), *Point2 = strchr(StrBuffer, '\n');
 
-        StrBuffer = strchr(StrBuffer, Separator);
+            StrBuffer = _MIN(Point1, Point2);
+        }
+
+        else
+            StrBuffer = strchr(StrBuffer, '\n');
 
         TOC[*NumOfLines].Length = StrBuffer - TOC[*NumOfLines].Line + 1;
 

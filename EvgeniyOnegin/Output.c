@@ -13,7 +13,7 @@ void WriteBufferToFile(const char* FilePath, const char* StrBuffer, unsigned int
     fclose(OutputFile);
 }
 
-void WriteToFileFollowingTOC(const char* FilePath, TableOfContent* TOC, const unsigned int NumOfLines, const char Separator)
+FILE* WriteToFileFollowingTOC(const char* FilePath, TableOfContent* TOC, const unsigned int NumOfLines, const char Separator)
 {
     assert(FilePath != NULL);
     assert(TOC != NULL);
@@ -23,17 +23,19 @@ void WriteToFileFollowingTOC(const char* FilePath, TableOfContent* TOC, const un
     FILE *OutFileStream = fopen(FilePath, "w");
     if (OutFileStream==NULL)
     {
-        printf("Wrong file path\n");
+        
 
-        exit(1);
+        return NULL;
     }
 
     for (int i = 0; i < NumOfLines; i++)
     {
+        //fprintf(OutFileStream, "Line %d:", i);
+        
         fwrite(TOC[i].Line, TOC[i].Length - 1, 1, OutFileStream);
 
         fputc(Separator, OutFileStream);
     }
 
-    fclose(OutFileStream);
+    return OutFileStream;
 }

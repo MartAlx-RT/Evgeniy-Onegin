@@ -8,15 +8,34 @@ int main(void)
 {
     int NumOfLines = 0;
 
-    char *Buffer = CreateStrBuffer("EvgeniyOnegin.txt");
-    assert(Buffer != NULL);
+    char *Buffer = CreateStrBuffer("biblia.txt"); //Input File path
+    assert(Buffer != NULL && "Error! Buffer cannot be created");
 
-    TableOfContent *TOC = CreateTOC(Buffer, &NumOfLines, ' ');
-    assert(TOC != NULL);
+    TableOfContent *TOC = CreateTOC(Buffer, &NumOfLines, '\n');
+    assert(TOC != NULL && "Error! TOC cannot be created");
 
-    QuickSort(TOC, NumOfLines, sizeof(TableOfContent), ByLastOnlyLetters);
+    /*
+    See more at the "Comparators.c"
+    ------------------------------------------------------------------
+    StrictSort - like as strcmp
 
-    WriteToFileFollowingTOC("Output.txt", TOC, NumOfLines, '\n');
+    ByFirstLetters - by first letters except start non-letter characters
+
+    ByFirstOnlyLetters - by first letters except all non-letter characters in a string
+
+    ByLastLetters - by last letters except last non-letter characters
+
+    ByLastOnlyLetters - by last letters except all non-letter characters in a string
+    */
+    
+    QuickSort(TOC, NumOfLines, sizeof(TableOfContent), ByLastLetters);
+
+    FILE *Output = WriteToFileFollowingTOC("Output.txt", TOC, NumOfLines, '\n'); //Output file path
+    assert(Output != NULL && "Error! Output file cannot be created");
+
+    free(Buffer);
+    free(TOC);
+    fclose(Output);
 
     return 0;
 }
