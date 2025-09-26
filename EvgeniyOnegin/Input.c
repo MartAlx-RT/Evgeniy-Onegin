@@ -1,6 +1,5 @@
 #include "Input.h"
 
-#define _MIN(x, y) ((x < y)? (x):(y))
 
 char *CreateStrBuffer(const char *const FilePath)
 {
@@ -58,7 +57,7 @@ TableOfContent *CreateTOC(char *StrBuffer, unsigned int *NumOfLines, const char 
 
     StrBuffer--;
 
-    while (StrBuffer++)
+    while (StrBuffer != NULL && *(++StrBuffer) != '\0')
     {
         //printf("line=%d\n", *NumOfLines);
         static unsigned int TocLen = 1;
@@ -76,15 +75,7 @@ TableOfContent *CreateTOC(char *StrBuffer, unsigned int *NumOfLines, const char 
 
         TOC[*NumOfLines].Line = StrBuffer;
 
-        if(Separator != '\n')
-        {
-            char *Point1 = strchr(StrBuffer, Separator), *Point2 = strchr(StrBuffer, '\n');
-
-            StrBuffer = _MIN(Point1, Point2);
-        }
-
-        else
-            StrBuffer = strchr(StrBuffer, '\n');
+        StrBuffer = strchr(StrBuffer, Separator);
 
         TOC[*NumOfLines].Length = StrBuffer - TOC[*NumOfLines].Line + 1;
 

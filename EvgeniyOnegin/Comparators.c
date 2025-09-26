@@ -1,6 +1,5 @@
 #include "Comparators.h"
 
-//#define _SQ(x) ((x)*(x))
 
 int StrictSort(const void *TOC_1, const void *TOC_2)
 {

@@ -13,12 +13,12 @@ void WriteBufferToFile(const char* FilePath, const char* StrBuffer, unsigned int
     fclose(OutputFile);
 }
 
-FILE* WriteToFileFollowingTOC(const char* FilePath, TableOfContent* TOC, const unsigned int NumOfLines, const char Separator)
+FILE* WriteToFileFollowingTOC(const char* FilePath, TableOfContent* TOC, const unsigned int NumOfLines, const char *SepStr)
 {
     assert(FilePath != NULL);
     assert(TOC != NULL);
     //assert(Separator > 'z' || Separator < 'A');
-    assert(Separator < 'A');
+    assert(SepStr != NULL);
 
     FILE *OutFileStream = fopen(FilePath, "w");
     if (OutFileStream==NULL)
@@ -34,7 +34,7 @@ FILE* WriteToFileFollowingTOC(const char* FilePath, TableOfContent* TOC, const u
         
         fwrite(TOC[i].Line, TOC[i].Length - 1, 1, OutFileStream);
 
-        fputc(Separator, OutFileStream);
+        fputs(SepStr, OutFileStream);
     }
 
     return OutFileStream;

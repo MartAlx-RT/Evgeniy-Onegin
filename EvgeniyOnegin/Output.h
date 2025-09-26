@@ -9,4 +9,4 @@
 
 void WriteBufferToFile(const char *FilePath, const char *StrBuffer, unsigned int NumOfLines);
 
-FILE* WriteToFileFollowingTOC(const char *FilePath, TableOfContent *TOC, const unsigned int NumOfLines, const char Separator);
+FILE* WriteToFileFollowingTOC(const char *FilePath, TableOfContent *TOC, const unsigned int NumOfLines, const char *SepStr);

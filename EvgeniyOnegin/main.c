@@ -8,7 +8,7 @@ int main(void)
 {
     int NumOfLines = 0;
 
-    char *Buffer = CreateStrBuffer("biblia.txt"); //Input File path
+    char *Buffer = CreateStrBuffer("EvgeniyOnegin.txt"); //Input File path
     assert(Buffer != NULL && "Error! Buffer cannot be created");
 
     TableOfContent *TOC = CreateTOC(Buffer, &NumOfLines, '\n');
@@ -27,10 +27,12 @@ int main(void)
 
     ByLastOnlyLetters - by last letters except all non-letter characters in a string
     */
+
+    printf("Processed %d lines\n", NumOfLines);
     
     QuickSort(TOC, NumOfLines, sizeof(TableOfContent), ByLastLetters);
 
-    FILE *Output = WriteToFileFollowingTOC("Output.txt", TOC, NumOfLines, '\n'); //Output file path
+    FILE *Output = WriteToFileFollowingTOC("Output.txt", TOC, NumOfLines, "\n\n"); //Output file path & Separator string
     assert(Output != NULL && "Error! Output file cannot be created");
 
     free(Buffer);
