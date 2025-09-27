@@ -13,7 +13,9 @@ char *CreateStrBuffer(const char *const FilePath)
     }
 
     struct stat FileInfo = {0};
-    stat(FilePath, &FileInfo);
+    if(stat(FilePath, &FileInfo))
+        return NULL;
+    
     unsigned const int BufferLen = FileInfo.st_size;
 
 
